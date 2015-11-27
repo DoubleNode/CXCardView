@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/ChrisXu1221/CXCardView"
   s.license      = 'MIT'
   s.author       = { "ChrisXu" => "taterctl@gmail.com" }
-  s.source       = { :git => "https://github.com/ChrisXu1221/CXCardView.git", :tag => "1.0.0" }
+  s.source       = { :git => "https://github.com/DoubleNode/CXCardView.git", :tag => "1.0.1" }
   s.source_files = 'CXCardView/*.{h,m}'
   s.platform     = :ios, '7.0'
   s.framework    = 'QuartzCore', 'CoreGraphics'
