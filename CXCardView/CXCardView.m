@@ -89,6 +89,14 @@ static CXCardView *__cx_cardview_current_view;
 
 @implementation CXCardView
 
++ (CGRect)screenSize
+{
+    CGSize  screenSize  = [UIScreen mainScreen].bounds.size;
+    CGSize  newSize     = CGSizeMake(MIN(screenSize.width, screenSize.height), MAX(screenSize.width, screenSize.height));
+    
+    return (CGRect){{ 0, 0 }, newSize };
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -177,7 +185,7 @@ static CXCardView *__cx_cardview_current_view;
     viewController.rootViewControllerPrefersStatusBarHidden = self.oldKeyWindow.rootViewController.prefersStatusBarHidden;
     
     if (!self.cardViewWindow) {
-        UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        UIWindow *window = [[UIWindow alloc] initWithFrame:[[self class] screenSize]];
         window.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         window.opaque = NO;
         window.windowLevel = UIWindowLevelCXCardView;
@@ -240,7 +248,7 @@ static CXCardView *__cx_cardview_current_view;
             self.alpha = 0.;
             
             if (!self.cardViewWindow) {
-                UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+                UIWindow *window = [[UIWindow alloc] initWithFrame:[[self class] screenSize]];
                 window.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
                 window.opaque = NO;
                 window.windowLevel = UIWindowLevelCXCardView;
@@ -412,7 +420,7 @@ static CXCardView *__cx_cardview_current_view;
 + (void)showBackground
 {
     if (!__cx_cardview_background_window) {
-        __cx_cardview_background_window = [[CXCardBackgroundWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        __cx_cardview_background_window = [[CXCardBackgroundWindow alloc] initWithFrame:[[self class] screenSize]];
         __cx_cardview_background_window.alpha = 0.;
     }
     
@@ -451,7 +459,7 @@ static CXCardView *__cx_cardview_current_view;
 }
 
 -(CGRect)currentScreenBoundsDependOnOrientation{
-    CGRect screenBounds = [UIScreen mainScreen].bounds ;
+    CGRect screenBounds = [[self class] screenSize];
     CGFloat width = CGRectGetWidth(screenBounds)  ;
     CGFloat height = CGRectGetHeight(screenBounds) ;
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -472,7 +480,7 @@ static CXCardView *__cx_cardview_current_view;
         frame;
     });
     
-    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    CGSize screenSize = [[self class] screenSize].size;
     
     CGRect frame = _contentView.frame;
     frame.origin.y = (CGRectGetHeight([self currentScreenBoundsDependOnOrientation]) - CGRectGetHeight(_contentView.frame))/2;
@@ -701,7 +709,7 @@ static CXCardView *__cx_cardview_current_view;
 - (void)transitionToBottomCompletion:(void(^)(void))completion
 {
     CGPoint center = _containerView.center;
-    CGFloat offset = CGRectGetHeight([UIScreen mainScreen].bounds) - CGRectGetMinY(_originFrame);
+    CGFloat offset = CGRectGetHeight([[self class] screenSize]) - CGRectGetMinY(_originFrame);
     center.y += offset*1.5;
     
     _isAnimatingToBottom = YES;

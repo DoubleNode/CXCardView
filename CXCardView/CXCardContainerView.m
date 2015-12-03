@@ -21,14 +21,23 @@
 @end
 
 @implementation CXCardContainerView
+
++ (CGRect)screenSize
+{
+    CGSize  screenSize  = [UIScreen mainScreen].bounds.size;
+    CGSize  newSize     = CGSizeMake(MIN(screenSize.width, screenSize.height), MAX(screenSize.width, screenSize.height));
+    
+    return (CGRect){{ 0, 0 }, newSize };
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
         _draggable = YES;
-        _topTriggerOffset = CGRectGetHeight([UIScreen mainScreen].bounds)/4*1;
-        _bottomTriggerOffset = CGRectGetHeight([UIScreen mainScreen].bounds)/4*3;
+        _topTriggerOffset = CGRectGetHeight([[self class] screenSize])/4*1;
+        _bottomTriggerOffset = CGRectGetHeight([[self class] screenSize])/4*3;
     }
     return self;
 }
@@ -38,8 +47,8 @@
     self = [super init];
     if (self) {
         _draggable = YES;
-        _topTriggerOffset = CGRectGetHeight([UIScreen mainScreen].bounds)/4*1;
-        _bottomTriggerOffset = CGRectGetHeight([UIScreen mainScreen].bounds)/4*3;
+        _topTriggerOffset = CGRectGetHeight([[self class] screenSize])/4*1;
+        _bottomTriggerOffset = CGRectGetHeight([[self class] screenSize])/4*3;
     }
     return self;
 }
@@ -81,7 +90,7 @@
             
 //            NSLog(@"%f,%f",y_offset,_shift.y);
             self.center = center;
-            CGFloat halfPi = (_startPoint.x > CGRectGetWidth([UIScreen mainScreen].bounds)/2) ? 180. : -180;
+            CGFloat halfPi = (_startPoint.x > CGRectGetWidth([[self class] screenSize])/2) ? 180. : -180;
             self.transform = CGAffineTransformMakeRotation(0.25f * _shift.y * M_PI / halfPi/4);
             
             CGFloat progressOfDraggingToTop = 1 - (_topTriggerOffset - center.y)/(_topTriggerOffset - _startCenter.y);
@@ -116,7 +125,7 @@
                 CGPoint center = self.center;
                 center.y += offset;
                 _shift.y += offset;
-                CGFloat halfPi = (_startPoint.x > CGRectGetWidth([UIScreen mainScreen].bounds)/2) ? 180. : -180;
+                CGFloat halfPi = (_startPoint.x > CGRectGetWidth([[self class] screenSize])/2) ? 180. : -180;
                 
                 [UIView animateKeyframesWithDuration:0.3 delay:0. options:UIViewKeyframeAnimationOptionCalculationModeCubicPaced animations:^{
                     self.center = center;
@@ -138,7 +147,7 @@
                 CGPoint center = self.center;
                 center.y += offset;
                 _shift.y += offset;
-                CGFloat halfPi = (_startPoint.x > CGRectGetWidth([UIScreen mainScreen].bounds)/2) ? 180. : -180;
+                CGFloat halfPi = (_startPoint.x > CGRectGetWidth([[self class] screenSize])/2) ? 180. : -180;
                 
                 [UIView animateKeyframesWithDuration:0.3 delay:0. options:UIViewKeyframeAnimationOptionCalculationModeCubicPaced animations:^{
                     self.center = center;
